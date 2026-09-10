@@ -2,8 +2,11 @@
 using namespace std;
 
 int main() {
-    int x;
-    cin >> x;
-    cout << 100 / x << endl;
+    cout << "Hello world" << endl;
+
+    char symbol = '\0';
+    cout << "Enter a character and press Enter: ";
+    cin >> symbol;
+
     return 0;
 }
