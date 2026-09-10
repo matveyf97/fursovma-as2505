@@ -5,8 +5,8 @@ int main() {
     cout << "Hello world" << endl;
 
     char symbol = '\0';
-    cout << "Enter a character and press Enter: ";
+    cout << "введите любой символ и нажмите enter: ";
     cin >> symbol;
-
+    cout << symbol;
     return 0;
 }
