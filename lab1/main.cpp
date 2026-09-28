@@ -1,4 +1,8 @@
 #include <iostream>
+#include <string>
+#include <sstream>
+
+
 using namespace std;
 
 int main() {
@@ -15,14 +19,52 @@ int main() {
         cout << "0. exit" << endl;
         cout << "choose action: ";
 
-        cin >> choice;
+        string line;
+
+        if (!getline(cin, line)) {
+            break;
+        }
+
+        istringstream input(line);
+        char extra;
+
+        if (!(input >> choice) || (input >> extra)) {
+            cout << "enter one whole number" << endl;
+            continue;
+        }
+
+        if (choice < 0 || choice > 7) {
+            cout << "choose from 0 to 7" << endl;
+            continue;
+        }
 
         if (choice == 0) {
             break;
         }
 
-        cout << "you chose: " << choice << endl;
-    }
-
+    switch (choice) {
+        case 1:
+            cout << "add pipe" << endl;
+            break;
+        case 2:
+            cout << "add station" << endl;
+            break;
+        case 3:
+            cout << "show objects" << endl;
+            break;
+        case 4:
+            cout << "edit pipe" << endl;
+            break;
+        case 5:
+            cout << "edit station" << endl;
+            break;
+        case 6:
+            cout << "save" << endl;
+            break;
+        case 7:
+            cout << "load" << endl;
+            break;
+        }
+    }    
     return 0;
 }
