@@ -6,31 +6,34 @@
 #include <fstream>
 #include <iomanip>
 
-
 using namespace std;
 
-
-struct Pipe {
-    string name; 
+struct Pipe
+{
+    string name;
     double length = 0;
     double diameter = 0;
     bool inRepair = false;
 };
 
-struct Station {
+struct Station
+{
     string name;
     int totalWorkshops = 0;
     int workingWorkshops = 0;
     int stationClass = 0;
 };
 
-bool readPositiveNumber(const string& prompt, double& value) {
+bool readPositiveNumber(const string &prompt, double &value)
+{
     string line;
 
-    while (true) {
+    while (true)
+    {
         cout << prompt;
 
-        if (!getline(cin, line)) {
+        if (!getline(cin, line))
+        {
             return false;
         }
 
@@ -38,8 +41,8 @@ bool readPositiveNumber(const string& prompt, double& value) {
         double number;
         char extra;
 
-        if ((input >> number) && !(input >> extra)
-            && isfinite(number) && number > 0) {
+        if ((input >> number) && !(input >> extra) && isfinite(number) && number > 0)
+        {
             value = number;
             return true;
         }
@@ -48,14 +51,17 @@ bool readPositiveNumber(const string& prompt, double& value) {
     }
 }
 
-bool readInteger(const string& prompt, int& value,
-                 int minValue, int maxValue) {
+bool readInteger(const string &prompt, int &value,
+                 int minValue, int maxValue)
+{
     string line;
 
-    while (true) {
+    while (true)
+    {
         cout << prompt;
 
-        if (!getline(cin, line)) {
+        if (!getline(cin, line))
+        {
             return false;
         }
 
@@ -63,8 +69,8 @@ bool readInteger(const string& prompt, int& value,
         int number;
         char extra;
 
-        if ((input >> number) && !(input >> extra)
-            && number >= minValue && number <= maxValue) {
+        if ((input >> number) && !(input >> extra) && number >= minValue && number <= maxValue)
+        {
             value = number;
             return true;
         }
@@ -74,37 +80,45 @@ bool readInteger(const string& prompt, int& value,
     }
 }
 
-bool readPipe(Pipe& pipe) {
+bool readPipe(Pipe &pipe)
+{
     Pipe newPipe;
 
-    while (true) {
+    while (true)
+    {
         cout << "pipe name: ";
 
-        if (!getline(cin, newPipe.name)) {
+        if (!getline(cin, newPipe.name))
+        {
             return false;
         }
 
-        if (newPipe.name.find_first_not_of(" \t\r") != string::npos) {
+        if (newPipe.name.find_first_not_of(" \t\r") != string::npos)
+        {
             break;
         }
 
         cout << "name cannot be empty" << endl;
     }
 
-    if (!readPositiveNumber("length in km: ", newPipe.length)) {
+    if (!readPositiveNumber("length in km: ", newPipe.length))
+    {
         return false;
     }
 
-    if (!readPositiveNumber("diameter in mm: ", newPipe.diameter)) {
+    if (!readPositiveNumber("diameter in mm: ", newPipe.diameter))
+    {
         return false;
     }
 
     string line;
 
-    while (true) {
+    while (true)
+    {
         cout << "in repair (0 - no, 1 - yes): ";
 
-        if (!getline(cin, line)) {
+        if (!getline(cin, line))
+        {
             return false;
         }
 
@@ -112,8 +126,8 @@ bool readPipe(Pipe& pipe) {
         int repair;
         char extra;
 
-        if ((input >> repair) && !(input >> extra)
-            && (repair == 0 || repair == 1)) {
+        if ((input >> repair) && !(input >> extra) && (repair == 0 || repair == 1))
+        {
             newPipe.inRepair = (repair == 1);
             break;
         }
@@ -125,39 +139,51 @@ bool readPipe(Pipe& pipe) {
     return true;
 }
 
-void showPipe(const Pipe& pipe) {
+void showPipe(const Pipe &pipe)
+{
     cout << "name: " << pipe.name << endl;
     cout << "length: " << pipe.length << " km" << endl;
     cout << "diameter: " << pipe.diameter << " mm" << endl;
 
-    if (pipe.inRepair) {
+    if (pipe.inRepair)
+    {
         cout << "in repair: yes" << endl;
-    } else {
+    }
+    else
+    {
         cout << "in repair: no" << endl;
     }
 }
 
-void editPipe(Pipe& pipe) {
+void editPipe(Pipe &pipe)
+{
     pipe.inRepair = !pipe.inRepair;
 
-    if (pipe.inRepair) {
+    if (pipe.inRepair)
+    {
         cout << "pipe is now in repair" << endl;
-    } else {
+    }
+    else
+    {
         cout << "pipe is now working" << endl;
     }
 }
 
-bool readStation(Station& station) {
+bool readStation(Station &station)
+{
     Station newStation;
 
-    while (true) {
+    while (true)
+    {
         cout << "station name: ";
 
-        if (!getline(cin, newStation.name)) {
+        if (!getline(cin, newStation.name))
+        {
             return false;
         }
 
-        if (newStation.name.find_first_not_of(" \t\r") != string::npos) {
+        if (newStation.name.find_first_not_of(" \t\r") != string::npos)
+        {
             break;
         }
 
@@ -166,19 +192,22 @@ bool readStation(Station& station) {
 
     if (!readInteger("total workshops: ",
                      newStation.totalWorkshops,
-                     1, numeric_limits<int>::max())) {
+                     1, numeric_limits<int>::max()))
+    {
         return false;
     }
 
     if (!readInteger("working workshops: ",
                      newStation.workingWorkshops,
-                     0, newStation.totalWorkshops)) {
+                     0, newStation.totalWorkshops))
+    {
         return false;
     }
 
     if (!readInteger("station class: ",
                      newStation.stationClass,
-                     1, numeric_limits<int>::max())) {
+                     1, numeric_limits<int>::max()))
+    {
         return false;
     }
 
@@ -186,36 +215,48 @@ bool readStation(Station& station) {
     return true;
 }
 
-void showStation(const Station& station) {
+void showStation(const Station &station)
+{
     cout << "station name: " << station.name << endl;
     cout << "total workshops: " << station.totalWorkshops << endl;
     cout << "working workshops: " << station.workingWorkshops << endl;
     cout << "station class: " << station.stationClass << endl;
 }
 
-bool editStation(Station& station) {
+bool editStation(Station &station)
+{
     cout << "1. start workshop" << endl;
     cout << "2. stop workshop" << endl;
     cout << "0. back" << endl;
 
     int action;
 
-    if (!readInteger("choose action: ", action, 0, 2)) {
+    if (!readInteger("choose action: ", action, 0, 2))
+    {
         return false;
     }
 
-    if (action == 1) {
-        if (station.workingWorkshops < station.totalWorkshops) {
+    if (action == 1)
+    {
+        if (station.workingWorkshops < station.totalWorkshops)
+        {
             station.workingWorkshops++;
             cout << "workshop started" << endl;
-        } else {
+        }
+        else
+        {
             cout << "all workshops are already working" << endl;
         }
-    } else if (action == 2) {
-        if (station.workingWorkshops > 0) {
+    }
+    else if (action == 2)
+    {
+        if (station.workingWorkshops > 0)
+        {
             station.workingWorkshops--;
             cout << "workshop stopped" << endl;
-        } else {
+        }
+        else
+        {
             cout << "all workshops are already stopped" << endl;
         }
     }
@@ -223,25 +264,29 @@ bool editStation(Station& station) {
     return true;
 }
 
-void savePipe(ofstream& file, const Pipe& pipe) {
+void savePipe(ofstream &file, const Pipe &pipe)
+{
     file << pipe.name << '\n';
     file << pipe.length << '\n';
     file << pipe.diameter << '\n';
     file << pipe.inRepair << '\n';
 }
 
-void saveStation(ofstream& file, const Station& station) {
+void saveStation(ofstream &file, const Station &station)
+{
     file << station.name << '\n';
     file << station.totalWorkshops << '\n';
     file << station.workingWorkshops << '\n';
     file << station.stationClass << '\n';
 }
 
-void saveData(const Pipe& pipe, bool hasPipe,
-              const Station& station, bool hasStation) {
+void saveData(const Pipe &pipe, bool hasPipe,
+              const Station &station, bool hasStation)
+{
     ofstream file("data.txt");
 
-    if (!file.is_open()) {
+    if (!file.is_open())
+    {
         cout << "cannot open file" << endl;
         return;
     }
@@ -250,28 +295,198 @@ void saveData(const Pipe& pipe, bool hasPipe,
 
     file << hasPipe << '\n';
 
-    if (hasPipe) {
+    if (hasPipe)
+    {
         savePipe(file, pipe);
     }
 
     file << hasStation << '\n';
 
-    if (hasStation) {
+    if (hasStation)
+    {
         saveStation(file, station);
     }
 
     file.close();
 
-    if (!file) {
+    if (!file)
+    {
         cout << "cannot save data" << endl;
         return;
     }
 
     cout << "data saved" << endl;
 }
+bool readFileInteger(ifstream &file, int &value)
+{
+    string line;
 
+    if (!getline(file, line))
+    {
+        return false;
+    }
 
-int main() {
+    istringstream input(line);
+    char extra;
+
+    if (!(input >> value) || (input >> extra))
+    {
+        return false;
+    }
+
+    return true;
+}
+
+bool readFileDouble(ifstream &file, double &value)
+{
+    string line;
+
+    if (!getline(file, line))
+    {
+        return false;
+    }
+
+    istringstream input(line);
+    char extra;
+
+    if (!(input >> value) || (input >> extra))
+    {
+        return false;
+    }
+
+    return isfinite(value);
+}
+
+bool loadPipe(ifstream &file, Pipe &pipe)
+{
+    if (!getline(file, pipe.name))
+    {
+        return false;
+    }
+
+    if (pipe.name.find_first_not_of(" \t\r") == string::npos)
+    {
+        return false;
+    }
+
+    if (!readFileDouble(file, pipe.length) || pipe.length <= 0)
+    {
+        return false;
+    }
+
+    if (!readFileDouble(file, pipe.diameter) || pipe.diameter <= 0)
+    {
+        return false;
+    }
+
+    int repair;
+
+    if (!readFileInteger(file, repair) || (repair != 0 && repair != 1))
+    {
+        return false;
+    }
+
+    pipe.inRepair = (repair == 1);
+    return true;
+}
+
+bool loadStation(ifstream &file, Station &station)
+{
+    if (!getline(file, station.name))
+    {
+        return false;
+    }
+
+    if (station.name.find_first_not_of(" \t\r") == string::npos)
+    {
+        return false;
+    }
+
+    if (!readFileInteger(file, station.totalWorkshops) || station.totalWorkshops < 1)
+    {
+        return false;
+    }
+
+    if (!readFileInteger(file, station.workingWorkshops) || station.workingWorkshops < 0 || station.workingWorkshops > station.totalWorkshops)
+    {
+        return false;
+    }
+
+    if (!readFileInteger(file, station.stationClass) || station.stationClass < 1)
+    {
+        return false;
+    }
+
+    return true;
+}
+
+void loadData(Pipe &pipe, bool &hasPipe,
+              Station &station, bool &hasStation)
+{
+    ifstream file("data.txt");
+
+    if (!file.is_open())
+    {
+        cout << "cannot open file" << endl;
+        return;
+    }
+
+    Pipe newPipe;
+    Station newStation;
+    int pipeExists;
+    int stationExists;
+
+    if (!readFileInteger(file, pipeExists) || (pipeExists != 0 && pipeExists != 1))
+    {
+        cout << "invalid pipe flag" << endl;
+        return;
+    }
+
+    if (pipeExists == 1 && !loadPipe(file, newPipe))
+    {
+        cout << "invalid pipe data" << endl;
+        return;
+    }
+
+    if (!readFileInteger(file, stationExists) || (stationExists != 0 && stationExists != 1))
+    {
+        cout << "invalid station flag" << endl;
+        return;
+    }
+
+    if (stationExists == 1 && !loadStation(file, newStation))
+    {
+        cout << "invalid station data" << endl;
+        return;
+    }
+
+    string remaining;
+
+    while (getline(file, remaining))
+    {
+        if (remaining.find_first_not_of(" \t\r") != string::npos)
+        {
+            cout << "unexpected data at end of file" << endl;
+            return;
+        }
+    }
+
+    if (file.bad() || !file.eof())
+    {
+        cout << "cannot read file" << endl;
+        return;
+    }
+
+    pipe = newPipe;
+    station = newStation;
+    hasPipe = (pipeExists == 1);
+    hasStation = (stationExists == 1);
+
+    cout << "data loaded" << endl;
+}
+
+int main()
+{
     int choice;
 
     Pipe pipe;
@@ -280,8 +495,9 @@ int main() {
     Station station;
     bool hasStation = false;
 
-    while (true) {
-                cout << "\n1. add pipe" << endl;
+    while (true)
+    {
+        cout << "\n1. add pipe" << endl;
         cout << "2. add station" << endl;
         cout << "3. show objects" << endl;
         cout << "4. edit pipe" << endl;
@@ -293,35 +509,42 @@ int main() {
 
         string line;
 
-        if (!getline(cin, line)) {
+        if (!getline(cin, line))
+        {
             break;
         }
 
         istringstream input(line);
         char extra;
 
-        if (!(input >> choice) || (input >> extra)) {
+        if (!(input >> choice) || (input >> extra))
+        {
             cout << "enter one whole number" << endl;
             continue;
         }
 
-        if (choice < 0 || choice > 7) {
+        if (choice < 0 || choice > 7)
+        {
             cout << "choose from 0 to 7" << endl;
             continue;
         }
 
-        if (choice == 0) {
+        if (choice == 0)
+        {
             break;
         }
 
-    switch (choice) {
+        switch (choice)
+        {
         case 1:
-            if (hasPipe) {
+            if (hasPipe)
+            {
                 cout << "pipe already added" << endl;
                 break;
             }
 
-            if (!readPipe(pipe)) {
+            if (!readPipe(pipe))
+            {
                 return 0;
             }
 
@@ -329,12 +552,14 @@ int main() {
             cout << "pipe added" << endl;
             break;
         case 2:
-            if (hasStation) {
+            if (hasStation)
+            {
                 cout << "station already added" << endl;
                 break;
             }
 
-            if (!readStation(station)) {
+            if (!readStation(station))
+            {
                 return 0;
             }
 
@@ -342,34 +567,44 @@ int main() {
             cout << "station added" << endl;
             break;
         case 3:
-            if (hasPipe) {
+            if (hasPipe)
+            {
                 showPipe(pipe);
-            } else {
+            }
+            else
+            {
                 cout << "no pipe added" << endl;
             }
 
-            if (hasStation) {
+            if (hasStation)
+            {
                 showStation(station);
-            } else {
+            }
+            else
+            {
                 cout << "no station added" << endl;
-
             }
             break;
 
         case 4:
-            if (hasPipe) {
+            if (hasPipe)
+            {
                 editPipe(pipe);
-            } else {
+            }
+            else
+            {
                 cout << "no pipe added" << endl;
             }
             break;
         case 5:
-            if (!hasStation) {
+            if (!hasStation)
+            {
                 cout << "no station added" << endl;
                 break;
             }
 
-            if (!editStation(station)) {
+            if (!editStation(station))
+            {
                 return 0;
             }
             break;
@@ -377,9 +612,9 @@ int main() {
             saveData(pipe, hasPipe, station, hasStation);
             break;
         case 7:
-            cout << "load" << endl;
+            loadData(pipe, hasPipe, station, hasStation);
             break;
         }
-    }    
+    }
     return 0;
 }
