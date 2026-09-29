@@ -2,6 +2,7 @@
 #include <string>
 #include <sstream>
 #include <cmath>
+#include <limits>
 
 using namespace std;
 
@@ -11,6 +12,13 @@ struct Pipe {
     double length = 0;
     double diameter = 0;
     bool inRepair = false;
+};
+
+struct Station {
+    string name;
+    int totalWorkshops = 0;
+    int workingWorkshops = 0;
+    int stationClass = 0;
 };
 
 bool readPositiveNumber(const string& prompt, double& value) {
@@ -34,6 +42,32 @@ bool readPositiveNumber(const string& prompt, double& value) {
         }
 
         cout << "enter a positive number" << endl;
+    }
+}
+
+bool readInteger(const string& prompt, int& value,
+                 int minValue, int maxValue) {
+    string line;
+
+    while (true) {
+        cout << prompt;
+
+        if (!getline(cin, line)) {
+            return false;
+        }
+
+        istringstream input(line);
+        int number;
+        char extra;
+
+        if ((input >> number) && !(input >> extra)
+            && number >= minValue && number <= maxValue) {
+            value = number;
+            return true;
+        }
+
+        cout << "enter a whole number from "
+             << minValue << " to " << maxValue << endl;
     }
 }
 
@@ -110,10 +144,60 @@ void editPipe(Pipe& pipe) {
     }
 }
 
+bool readStation(Station& station) {
+    Station newStation;
+
+    while (true) {
+        cout << "station name: ";
+
+        if (!getline(cin, newStation.name)) {
+            return false;
+        }
+
+        if (newStation.name.find_first_not_of(" \t\r") != string::npos) {
+            break;
+        }
+
+        cout << "name cannot be empty" << endl;
+    }
+
+    if (!readInteger("total workshops: ",
+                     newStation.totalWorkshops,
+                     1, numeric_limits<int>::max())) {
+        return false;
+    }
+
+    if (!readInteger("working workshops: ",
+                     newStation.workingWorkshops,
+                     0, newStation.totalWorkshops)) {
+        return false;
+    }
+
+    if (!readInteger("station class: ",
+                     newStation.stationClass,
+                     1, numeric_limits<int>::max())) {
+        return false;
+    }
+
+    station = newStation;
+    return true;
+}
+
+void showStation(const Station& station) {
+    cout << "station name: " << station.name << endl;
+    cout << "total workshops: " << station.totalWorkshops << endl;
+    cout << "working workshops: " << station.workingWorkshops << endl;
+    cout << "station class: " << station.stationClass << endl;
+}
+
 int main() {
     int choice;
+
     Pipe pipe;
     bool hasPipe = false;
+
+    Station station;
+    bool hasStation = false;
 
     while (true) {
                 cout << "\n1. add pipe" << endl;
@@ -164,13 +248,30 @@ int main() {
             cout << "pipe added" << endl;
             break;
         case 2:
-            cout << "add station" << endl;
+            if (hasStation) {
+                cout << "station already added" << endl;
+                break;
+            }
+
+            if (!readStation(station)) {
+                return 0;
+            }
+
+            hasStation = true;
+            cout << "station added" << endl;
             break;
         case 3:
             if (hasPipe) {
                 showPipe(pipe);
             } else {
                 cout << "no pipe added" << endl;
+            }
+
+            if (hasStation) {
+                showStation(station);
+            } else {
+                cout << "no station added" << endl;
+                
             }
             break;
 
