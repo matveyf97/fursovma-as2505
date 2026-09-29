@@ -190,6 +190,36 @@ void showStation(const Station& station) {
     cout << "station class: " << station.stationClass << endl;
 }
 
+bool editStation(Station& station) {
+    cout << "1. start workshop" << endl;
+    cout << "2. stop workshop" << endl;
+    cout << "0. back" << endl;
+
+    int action;
+
+    if (!readInteger("choose action: ", action, 0, 2)) {
+        return false;
+    }
+
+    if (action == 1) {
+        if (station.workingWorkshops < station.totalWorkshops) {
+            station.workingWorkshops++;
+            cout << "workshop started" << endl;
+        } else {
+            cout << "all workshops are already working" << endl;
+        }
+    } else if (action == 2) {
+        if (station.workingWorkshops > 0) {
+            station.workingWorkshops--;
+            cout << "workshop stopped" << endl;
+        } else {
+            cout << "all workshops are already stopped" << endl;
+        }
+    }
+
+    return true;
+}
+
 int main() {
     int choice;
 
@@ -271,7 +301,7 @@ int main() {
                 showStation(station);
             } else {
                 cout << "no station added" << endl;
-                
+
             }
             break;
 
@@ -283,7 +313,14 @@ int main() {
             }
             break;
         case 5:
-            cout << "edit station" << endl;
+            if (!hasStation) {
+                cout << "no station added" << endl;
+                break;
+            }
+
+            if (!editStation(station)) {
+                return 0;
+            }
             break;
         case 6:
             cout << "save" << endl;
