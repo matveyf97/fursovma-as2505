@@ -3,6 +3,9 @@
 #include <sstream>
 #include <cmath>
 #include <limits>
+#include <fstream>
+#include <iomanip>
+
 
 using namespace std;
 
@@ -220,6 +223,54 @@ bool editStation(Station& station) {
     return true;
 }
 
+void savePipe(ofstream& file, const Pipe& pipe) {
+    file << pipe.name << '\n';
+    file << pipe.length << '\n';
+    file << pipe.diameter << '\n';
+    file << pipe.inRepair << '\n';
+}
+
+void saveStation(ofstream& file, const Station& station) {
+    file << station.name << '\n';
+    file << station.totalWorkshops << '\n';
+    file << station.workingWorkshops << '\n';
+    file << station.stationClass << '\n';
+}
+
+void saveData(const Pipe& pipe, bool hasPipe,
+              const Station& station, bool hasStation) {
+    ofstream file("data.txt");
+
+    if (!file.is_open()) {
+        cout << "cannot open file" << endl;
+        return;
+    }
+
+    file << setprecision(numeric_limits<double>::max_digits10);
+
+    file << hasPipe << '\n';
+
+    if (hasPipe) {
+        savePipe(file, pipe);
+    }
+
+    file << hasStation << '\n';
+
+    if (hasStation) {
+        saveStation(file, station);
+    }
+
+    file.close();
+
+    if (!file) {
+        cout << "cannot save data" << endl;
+        return;
+    }
+
+    cout << "data saved" << endl;
+}
+
+
 int main() {
     int choice;
 
@@ -323,7 +374,7 @@ int main() {
             }
             break;
         case 6:
-            cout << "save" << endl;
+            saveData(pipe, hasPipe, station, hasStation);
             break;
         case 7:
             cout << "load" << endl;
