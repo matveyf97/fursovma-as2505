@@ -1,12 +1,97 @@
 #include <iostream>
 #include <string>
 #include <sstream>
-
+#include <cmath>
 
 using namespace std;
 
+
+struct Pipe {
+    string name; 
+    double length = 0;
+    double diameter = 0;
+    bool inRepair = false;
+};
+
+bool readPositiveNumber(const string& prompt, double& value) {
+    string line;
+
+    while (true) {
+        cout << prompt;
+
+        if (!getline(cin, line)) {
+            return false;
+        }
+
+        istringstream input(line);
+        double number;
+        char extra;
+
+        if ((input >> number) && !(input >> extra)
+            && isfinite(number) && number > 0) {
+            value = number;
+            return true;
+        }
+
+        cout << "enter a positive number" << endl;
+    }
+}
+
+bool readPipe(Pipe& pipe) {
+    Pipe newPipe;
+
+    while (true) {
+        cout << "pipe name: ";
+
+        if (!getline(cin, newPipe.name)) {
+            return false;
+        }
+
+        if (newPipe.name.find_first_not_of(" \t\r") != string::npos) {
+            break;
+        }
+
+        cout << "name cannot be empty" << endl;
+    }
+
+    if (!readPositiveNumber("length in km: ", newPipe.length)) {
+        return false;
+    }
+
+    if (!readPositiveNumber("diameter in mm: ", newPipe.diameter)) {
+        return false;
+    }
+
+    string line;
+
+    while (true) {
+        cout << "in repair (0 - no, 1 - yes): ";
+
+        if (!getline(cin, line)) {
+            return false;
+        }
+
+        istringstream input(line);
+        int repair;
+        char extra;
+
+        if ((input >> repair) && !(input >> extra)
+            && (repair == 0 || repair == 1)) {
+            newPipe.inRepair = (repair == 1);
+            break;
+        }
+
+        cout << "enter 0 or 1" << endl;
+    }
+
+    pipe = newPipe;
+    return true;
+}
+
 int main() {
     int choice;
+    Pipe pipe;
+    bool hasPipe = false;
 
     while (true) {
                 cout << "\n1. add pipe" << endl;
@@ -44,13 +129,30 @@ int main() {
 
     switch (choice) {
         case 1:
-            cout << "add pipe" << endl;
+            if (hasPipe) {
+                cout << "pipe already added" << endl;
+                break;
+            }
+
+            if (!readPipe(pipe)) {
+                return 0;
+            }
+
+            hasPipe = true;
+            cout << "pipe added" << endl;
             break;
         case 2:
             cout << "add station" << endl;
             break;
         case 3:
-            cout << "show objects" << endl;
+            if (hasPipe) {
+                cout << "name: " << pipe.name << endl;
+                cout << "length: " << pipe.length << " km" << endl;
+                cout << "diameter: " << pipe.diameter << " mm" << endl;
+                cout << "in repair: " << pipe.inRepair << endl;
+            } else {
+                cout << "no pipe added" << endl;
+            }
             break;
         case 4:
             cout << "edit pipe" << endl;
