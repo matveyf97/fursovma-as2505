@@ -88,6 +88,28 @@ bool readPipe(Pipe& pipe) {
     return true;
 }
 
+void showPipe(const Pipe& pipe) {
+    cout << "name: " << pipe.name << endl;
+    cout << "length: " << pipe.length << " km" << endl;
+    cout << "diameter: " << pipe.diameter << " mm" << endl;
+
+    if (pipe.inRepair) {
+        cout << "in repair: yes" << endl;
+    } else {
+        cout << "in repair: no" << endl;
+    }
+}
+
+void editPipe(Pipe& pipe) {
+    pipe.inRepair = !pipe.inRepair;
+
+    if (pipe.inRepair) {
+        cout << "pipe is now in repair" << endl;
+    } else {
+        cout << "pipe is now working" << endl;
+    }
+}
+
 int main() {
     int choice;
     Pipe pipe;
@@ -146,16 +168,18 @@ int main() {
             break;
         case 3:
             if (hasPipe) {
-                cout << "name: " << pipe.name << endl;
-                cout << "length: " << pipe.length << " km" << endl;
-                cout << "diameter: " << pipe.diameter << " mm" << endl;
-                cout << "in repair: " << pipe.inRepair << endl;
+                showPipe(pipe);
             } else {
                 cout << "no pipe added" << endl;
             }
             break;
+
         case 4:
-            cout << "edit pipe" << endl;
+            if (hasPipe) {
+                editPipe(pipe);
+            } else {
+                cout << "no pipe added" << endl;
+            }
             break;
         case 5:
             cout << "edit station" << endl;
